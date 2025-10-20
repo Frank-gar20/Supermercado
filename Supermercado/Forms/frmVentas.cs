@@ -12,9 +12,27 @@ namespace Supermercado.Forms
 {
     public partial class frmVentas : Form
     {
+        Datos datos = new Datos();
+        private void mostrarDatos()
+        {
+            DataSet ds = datos.getAlldata("select * from ventas order by id");
+            if (ds != null)
+            {
+                dgvDatos.DataSource = ds.Tables[0];
+            }
+            else
+            {
+                MessageBox.Show("Error al cargar los datos", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         public frmVentas()
         {
             InitializeComponent();
+        }
+
+        private void frmVentas_Activated(object sender, EventArgs e)
+        {
+            mostrarDatos();
         }
     }
 }
