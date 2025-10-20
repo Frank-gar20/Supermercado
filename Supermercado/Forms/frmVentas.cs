@@ -16,9 +16,13 @@ namespace Supermercado.Forms
         private void mostrarDatos()
         {
             DataSet ds = datos.getAlldata("select * from ventas order by id");
+            DataSet ds2 = datos.getAlldata("select * from ventas_productos order by id");
+            DataSet ds3 = datos.getAlldata("select * from compras_clientes order by id");
             if (ds != null)
             {
                 dgvDatos.DataSource = ds.Tables[0];
+                dgvDetalles.DataSource = ds2.Tables[0];
+                dgvCompras.DataSource = ds3.Tables[0];
             }
             else
             {

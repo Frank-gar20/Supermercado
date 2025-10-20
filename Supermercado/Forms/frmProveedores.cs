@@ -34,5 +34,24 @@ namespace Supermercado.Forms
         {
             mostrarDatos();
         }
+
+        private void txtBuscar_TextChanged(object sender, EventArgs e)
+        {
+            DataSet ds = datos.getAlldata("select * from proveedores where " +
+            "empresa ilike '%" + txtBuscar.Text + "%' or " +
+            "tipo_producto ilike '%" + txtBuscar.Text + "%' or " +
+            "direccion ilike '%" + txtBuscar.Text + "%' or " +
+            "nro_tel_princ ilike '%" + txtBuscar.Text + "%' or " +
+            "nro_tel_sec ilike '%" + txtBuscar.Text + "%' or " +
+            "email ilike '%" + txtBuscar.Text + "%'");
+            if (ds != null)
+            {
+                dgvDatos.DataSource = ds.Tables[0];
+            }
+            else
+            {
+                MessageBox.Show("Error al cargar los datos", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
