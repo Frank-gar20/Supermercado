@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageMagick;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +13,12 @@ namespace Supermercado.Forms
 {
     public partial class frmProductos : Form
     {
+        int id = -1;
         Datos datos = new Datos();
         private void mostrarDatos()
         {
-            DataSet ds = datos.getAlldata("select * from productos order by id");
+            DataSet ds = datos.getAlldata("select id_proveedor, codigo, nombre, marca, tipo, grupo," +
+                "peso, precio_unidad, stock from productos order by id");
             if (ds != null)
             {
                 dgvDatos.DataSource = ds.Tables[0];
@@ -55,6 +58,61 @@ namespace Supermercado.Forms
             else
             {
                 MessageBox.Show("Error al cargar los datos", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            bool resultado;
+            Datos data = new Datos();
+
+            if (id == -1)
+            {
+                string query = "INSERT INTO productos (id_proveedor, codigo, nombre, marca, tipo, grupo, peso, precio_unidad, stock) " +
+                     "VALUES (" + txtIdProveedor.Text + ", '" + txtCodigo.Text + "', '" + txtNombre.Text + "', '" +
+                     txtMarca.Text + "', '" + txtTipo.Text + "', '" + txtGrupo.Text + "', " + txtPeso.Text + ", " +
+                     txtPrecioUnidad.Text + ", " + txtStock.Text + ")";
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro agregado", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al agregar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                string query = "UPDATE productos SET " +
+                     "id_proveedor = " + txtIdProveedor.Text + ", " +
+                     "codigo = '" + txtCodigo.Text + "', " +
+                     "nombre = '" + txtNombre.Text + "', " +
+                     "marca = '" + txtMarca.Text + "', " +
+                     "tipo = '" + txtTipo.Text + "', " +
+                     "grupo = '" + txtGrupo.Text + "', " +
+                     "peso = " + txtPeso.Text + ", " +
+                     "precio_unidad = " + txtPrecioUnidad.Text + ", " +
+                     "stock = " + txtStock.Text + " " +
+                     "WHERE id = " + id;
+                ;
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

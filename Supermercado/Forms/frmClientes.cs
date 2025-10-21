@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageMagick;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace Supermercado.Forms
 {
     public partial class frmClientes : Form
     {
+        int id = -1;
         Datos datos = new Datos();
         private void mostrarDatos()
         {
@@ -58,6 +60,53 @@ namespace Supermercado.Forms
             else
             {
                 MessageBox.Show("Error al cargar los datos", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            bool resultado;
+            Datos data = new Datos();
+
+            if (id == -1)
+            {
+                string query = "INSERT INTO clientes (nombre, apellido, tipo_doc, nro_doc, nro_tel_princ, nro_tel_sec, email) " +
+                     "VALUES ('" + txtNombre.Text + "', '" + txtApellido.Text + "', '" + txtTipoDoc.Text + "', '" +
+                     txtNroDoc.Text + "', '" + mtbNroTelPrinc.Text + "', '" + mtbNroTelSec.Text + "', '" + txtEmail.Text + "')";
+
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro agregado", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al agregar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                string query = "UPDATE clientes SET " +
+                     "nombre = '" + txtNombre.Text + "', " +
+                     "apellido = '" + txtApellido.Text + "', " +
+                     "tipo_doc = '" + txtTipoDoc.Text + "', " +
+                     "nro_doc = '" + txtNroDoc.Text + "', " +
+                     "nro_tel_princ = '" + mtbNroTelPrinc.Text + "', " +
+                     "nro_tel_sec = '" + mtbNroTelSec.Text + "', " +
+                     "email = '" + txtEmail.Text + "' " +
+                     "WHERE id = " + id;
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
