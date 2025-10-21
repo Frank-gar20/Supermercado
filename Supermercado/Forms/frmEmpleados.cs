@@ -31,6 +31,32 @@ namespace Supermercado.Forms
             InitializeComponent();
         }
 
+        private void CargarDatos(int id)
+        {
+            DataSet ds = datos.getAlldata("SELECT * FROM empleados WHERE id = " + id);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                txtNombre.Text = ds.Tables[0].Rows[0]["nombre"].ToString();
+                txtApellido.Text = ds.Tables[0].Rows[0]["apellido"].ToString();
+                txtEdad.Text = ds.Tables[0].Rows[0]["edad"].ToString();
+                dtpFechaNac.Text = ds.Tables[0].Rows[0]["fecha_nac"].ToString();
+                txtTipoDoc.Text = ds.Tables[0].Rows[0]["tipo_doc"].ToString();
+                txtNroDoc.Text = ds.Tables[0].Rows[0]["nro_doc"].ToString();
+                txtCuli.Text = ds.Tables[0].Rows[0]["cuil"].ToString();
+                txtDireccion.Text = ds.Tables[0].Rows[0]["direccion"].ToString();
+                mtbNroTelPrinc.Text = ds.Tables[0].Rows[0]["nro_tel_princ"].ToString();
+                mtbNroTelSec.Text = ds.Tables[0].Rows[0]["nro_tel_sec"].ToString();
+                txtEmail.Text = ds.Tables[0].Rows[0]["email"].ToString();
+                txtCargo.Text = ds.Tables[0].Rows[0]["cargo"].ToString();
+                txtAntiguedad.Text = ds.Tables[0].Rows[0]["antiguedad"].ToString();
+                dtpFechaIngreso.Text = ds.Tables[0].Rows[0]["fecha_ingreso"].ToString();
+                txtSalarioAnual.Text = ds.Tables[0].Rows[0]["salario_anual"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró el Empleado", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
         private void frmEmpleados_Activated(object sender, EventArgs e)
         {
             mostrarDatos();
@@ -72,10 +98,21 @@ namespace Supermercado.Forms
             if (id == -1)
             {
                 string query = "INSERT INTO empleados (nombre, apellido, edad, fecha_nac, tipo_doc, nro_doc, cuil, direccion, nro_tel_princ, nro_tel_sec, email, cargo, antiguedad, fecha_ingreso, salario_anual) " +
-                     "VALUES ('" + txtNombre.Text + "', '" + txtApellido.Text + "', " + txtEdad.Text + ", '" + txtFechaNac.Text + "', '" +
-                     txtTipoDoc.Text + "', '" + txtNroDoc.Text + "', '" + txtCuli.Text + "', '" + txtDireccion.Text + "', '" +
-                     mtbNroTelPrinc.Text + "', '" + mtbNroTelSec.Text + "', '" + txtEmail.Text + "', '" + txtCargo.Text + "', '" +
-                     txtAntiguedad.Text + "', '" + txtFechaIngreso.Text + "', " + txtSalarioAnual.Text + ")";
+                     "VALUES ('" + txtNombre.Text + "', " +
+                     "'" + txtApellido.Text + "', " +
+                    Convert.ToInt32(txtEdad.Text) + ", " +
+                    "'" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', "+
+                    "'" + txtTipoDoc.Text + "', " +
+                    "'" + txtNroDoc.Text + "', " +
+                    "'" + txtCuli.Text + "', " +
+                    "'" + txtDireccion.Text + "', " +
+                    "'" + mtbNroTelPrinc.Text + "', " +
+                    "'" + mtbNroTelSec.Text + "', " +
+                    "'" + txtEmail.Text + "', " +
+                    "'" + txtCargo.Text + "', " +
+                    "'" + txtAntiguedad.Text + "', " +
+                    "'" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
+                    Convert.ToDecimal(txtSalarioAnual.Text) + ")";
                 resultado = data.ExecuteQuery(query);
                 if (resultado)
                 {
@@ -94,7 +131,7 @@ namespace Supermercado.Forms
                      "nombre = '" + txtNombre.Text + "', " +
                      "apellido = '" + txtApellido.Text + "', " +
                      "edad = " + txtEdad.Text + ", " +
-                     "fecha_nac = '" + txtFechaNac.Text + "', " +
+                     "fecha_nac = '" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', " +
                      "tipo_doc = '" + txtTipoDoc.Text + "', " +
                      "nro_doc = '" + txtNroDoc.Text + "', " +
                      "cuil = '" + txtCuli.Text + "', " +
@@ -104,7 +141,7 @@ namespace Supermercado.Forms
                      "email = '" + txtEmail.Text + "', " +
                      "cargo = '" + txtCargo.Text + "', " +
                      "antiguedad = '" + txtAntiguedad.Text + "', " +
-                     "fecha_ingreso = '" + txtFechaIngreso.Text + "', " +
+                     "fecha_ingreso = '" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
                      "salario_anual = " + txtSalarioAnual.Text + " " +
                      "WHERE id = " + id;
                 resultado = data.ExecuteQuery(query);
@@ -143,6 +180,39 @@ namespace Supermercado.Forms
             else
             {
                 return;
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            btnGuardar.Text = "Guardar";
+            txtNombre.Text = string.Empty;
+            txtApellido.Text = string.Empty;
+            txtEdad.Text = string.Empty;
+            dtpFechaNac.Value = DateTime.Now;
+            txtTipoDoc.Text = string.Empty;
+            txtNroDoc.Text = string.Empty;
+            txtCuli.Text = string.Empty;
+            txtDireccion.Text = string.Empty;
+            mtbNroTelPrinc.Text = string.Empty;
+            mtbNroTelSec.Text = string.Empty;
+            txtEmail.Text = string.Empty;
+            txtCargo.Text = string.Empty;
+            txtAntiguedad.Text = string.Empty;
+            dtpFechaIngreso.Value = DateTime.Now;
+            txtSalarioAnual.Text = string.Empty;
+            id = -1;
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value);
+                CargarDatos(id);
+                tbPaginacion.SelectedTab = tabPage1;
+                btnGuardar.Text = "Actualizar";
+                this.id = id;
             }
         }
     }

@@ -32,6 +32,24 @@ namespace Supermercado.Forms
         {
             InitializeComponent();
         }
+        private void CargarDatos(int id)
+        {
+            DataSet ds = datos.getAlldata("SELECT * FROM clientes WHERE id = " + id);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                txtNombre.Text = ds.Tables[0].Rows[0]["nombre"].ToString();
+                txtApellido.Text = ds.Tables[0].Rows[0]["apellido"].ToString();
+                txtTipoDoc.Text = ds.Tables[0].Rows[0]["tipo_doc"].ToString();
+                txtNroDoc.Text = ds.Tables[0].Rows[0]["nro_doc"].ToString();
+                mtbNroTelPrinc.Text = ds.Tables[0].Rows[0]["nro_tel_princ"].ToString();
+                mtbNroTelSec.Text = ds.Tables[0].Rows[0]["nro_tel_sec"].ToString();
+                txtEmail.Text = ds.Tables[0].Rows[0]["email"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró el cliente", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
@@ -134,6 +152,31 @@ namespace Supermercado.Forms
             {
                 return;
             }
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value);
+                CargarDatos(id);
+                tbPaginacion.SelectedTab = tabPage1;
+                btnGuardar.Text = "Actualizar";
+                this.id = id;
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            btnGuardar.Text = "Guardar";
+            txtNombre.Text = string.Empty;
+            txtApellido.Text = string.Empty;
+            txtNroDoc.Text = string.Empty;
+            txtTipoDoc.Text = string.Empty;
+            mtbNroTelPrinc.Text = string.Empty;
+            mtbNroTelSec.Text = string.Empty;
+            txtEmail.Text = string.Empty;
+            id = -1;
         }
     }
 }

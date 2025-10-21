@@ -31,6 +31,25 @@ namespace Supermercado.Forms
             InitializeComponent();
         }
 
+        private void CargarDatos(int id)
+        {
+            DataSet ds = datos.getAlldata("SELECT * FROM proveedores entes WHERE id = " + id);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                txtEmpresa.Text = ds.Tables[0].Rows[0]["empresa"].ToString();
+                txtTipoProducto.Text = ds.Tables[0].Rows[0]["tipo_producto"].ToString();
+                txtDireccion.Text = ds.Tables[0].Rows[0]["direccion"].ToString();
+                mtbNroTelPrinc.Text = ds.Tables[0].Rows[0]["nro_tel_princ"].ToString();
+                mtbNroTelSec.Text = ds.Tables[0].Rows[0]["nro_tel_sec"].ToString();
+                txtEmail.Text = ds.Tables[0].Rows[0]["email"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró el cliente", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
         private void frmProveedores_Activated(object sender, EventArgs e)
         {
             mostrarDatos();
@@ -123,6 +142,35 @@ namespace Supermercado.Forms
             else
             {
                 return;
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            btnGuardar.Text = "Guardar";
+            txtEmpresa.Text = string.Empty;
+            txtTipoProducto.Text = string.Empty;
+            txtDireccion.Text = string.Empty;
+            mtbNroTelPrinc.Text = string.Empty;
+            mtbNroTelSec.Text = string.Empty;
+            txtEmail.Text = string.Empty;
+            id = -1;
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value);
+                CargarDatos(id);
+                tbPaginacion.SelectedTab = tabPage1;
+                btnGuardar.Text = "Actualizar";
+                this.id = id;
             }
         }
     }

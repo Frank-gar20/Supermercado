@@ -34,7 +34,6 @@
             this.btnGuardar = new System.Windows.Forms.Button();
             this.txtSalarioAnual = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.txtFechaIngreso = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.txtAntiguedad = new System.Windows.Forms.TextBox();
@@ -50,7 +49,6 @@
             this.txtDireccion = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtCuli = new System.Windows.Forms.TextBox();
-            this.txtFechaNac = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtNroDoc = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -69,6 +67,9 @@
             this.cmsEditarEliminar = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.dtpFechaNac = new System.Windows.Forms.DateTimePicker();
+            this.dtpFechaIngreso = new System.Windows.Forms.DateTimePicker();
             this.tbPaginacion.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -88,10 +89,12 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.dtpFechaIngreso);
+            this.tabPage1.Controls.Add(this.dtpFechaNac);
+            this.tabPage1.Controls.Add(this.btnLimpiar);
             this.tabPage1.Controls.Add(this.btnGuardar);
             this.tabPage1.Controls.Add(this.txtSalarioAnual);
             this.tabPage1.Controls.Add(this.label16);
-            this.tabPage1.Controls.Add(this.txtFechaIngreso);
             this.tabPage1.Controls.Add(this.label15);
             this.tabPage1.Controls.Add(this.label14);
             this.tabPage1.Controls.Add(this.txtAntiguedad);
@@ -107,7 +110,6 @@
             this.tabPage1.Controls.Add(this.txtDireccion);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.txtCuli);
-            this.tabPage1.Controls.Add(this.txtFechaNac);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.txtNroDoc);
             this.tabPage1.Controls.Add(this.label6);
@@ -155,14 +157,6 @@
             this.label16.Size = new System.Drawing.Size(107, 20);
             this.label16.TabIndex = 52;
             this.label16.Text = "Salario Anual:";
-            // 
-            // txtFechaIngreso
-            // 
-            this.txtFechaIngreso.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFechaIngreso.Location = new System.Drawing.Point(492, 274);
-            this.txtFechaIngreso.Name = "txtFechaIngreso";
-            this.txtFechaIngreso.Size = new System.Drawing.Size(151, 26);
-            this.txtFechaIngreso.TabIndex = 51;
             // 
             // label15
             // 
@@ -292,7 +286,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(39, 20);
             this.label7.TabIndex = 37;
-            this.label7.Text = "Culi:";
+            this.label7.Text = "Cuil:";
             // 
             // txtCuli
             // 
@@ -301,14 +295,6 @@
             this.txtCuli.Name = "txtCuli";
             this.txtCuli.Size = new System.Drawing.Size(151, 26);
             this.txtCuli.TabIndex = 36;
-            // 
-            // txtFechaNac
-            // 
-            this.txtFechaNac.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFechaNac.Location = new System.Drawing.Point(33, 274);
-            this.txtFechaNac.Name = "txtFechaNac";
-            this.txtFechaNac.Size = new System.Drawing.Size(151, 26);
-            this.txtFechaNac.TabIndex = 35;
             // 
             // label8
             // 
@@ -462,15 +448,42 @@
             // editarToolStripMenuItem
             // 
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.editarToolStripMenuItem.Text = "Editar";
+            this.editarToolStripMenuItem.Click += new System.EventHandler(this.editarToolStripMenuItem_Click);
             // 
             // eliminarToolStripMenuItem
             // 
             this.eliminarToolStripMenuItem.Name = "eliminarToolStripMenuItem";
-            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.eliminarToolStripMenuItem.Text = "Eliminar";
             this.eliminarToolStripMenuItem.Click += new System.EventHandler(this.eliminarToolStripMenuItem_Click);
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Location = new System.Drawing.Point(711, 149);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(91, 32);
+            this.btnLimpiar.TabIndex = 55;
+            this.btnLimpiar.Text = "Limpiar campos";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // dtpFechaNac
+            // 
+            this.dtpFechaNac.Location = new System.Drawing.Point(15, 280);
+            this.dtpFechaNac.Name = "dtpFechaNac";
+            this.dtpFechaNac.Size = new System.Drawing.Size(200, 20);
+            this.dtpFechaNac.TabIndex = 56;
+            // 
+            // dtpFechaIngreso
+            // 
+            this.dtpFechaIngreso.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpFechaIngreso.Location = new System.Drawing.Point(492, 274);
+            this.dtpFechaIngreso.Name = "dtpFechaIngreso";
+            this.dtpFechaIngreso.Size = new System.Drawing.Size(240, 22);
+            this.dtpFechaIngreso.TabIndex = 57;
             // 
             // frmEmpleados
             // 
@@ -507,7 +520,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtEdad;
-        private System.Windows.Forms.TextBox txtFechaNac;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtNroDoc;
         private System.Windows.Forms.Label label6;
@@ -526,7 +538,6 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.TextBox txtSalarioAnual;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txtFechaIngreso;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txtAntiguedad;
@@ -534,5 +545,8 @@
         private System.Windows.Forms.ContextMenuStrip cmsEditarEliminar;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eliminarToolStripMenuItem;
+        private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.DateTimePicker dtpFechaNac;
+        private System.Windows.Forms.DateTimePicker dtpFechaIngreso;
     }
 }

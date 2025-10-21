@@ -33,6 +33,26 @@ namespace Supermercado.Forms
             InitializeComponent();
         }
 
+        private void CargarDatos(int id)
+        {
+            DataSet ds = datos.getAlldata("SELECT * FROM productos WHERE id = " + id);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                txtIdProveedor.Text = ds.Tables[0].Rows[0]["id_proveedor"].ToString();
+                txtCodigo.Text = ds.Tables[0].Rows[0]["codigo"].ToString();
+                txtNombre.Text = ds.Tables[0].Rows[0]["nombre"].ToString();
+                txtMarca.Text = ds.Tables[0].Rows[0]["marca"].ToString();
+                txtTipo.Text = ds.Tables[0].Rows[0]["tipo"].ToString();
+                txtGrupo.Text = ds.Tables[0].Rows[0]["grupo"].ToString();
+                txtPeso.Text = ds.Tables[0].Rows[0]["peso"].ToString();
+                txtPrecioUnidad.Text = ds.Tables[0].Rows[0]["precio_unidad"].ToString();
+                txtStock.Text = ds.Tables[0].Rows[0]["stock"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró el cliente", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
         private void frmProductos_Activated(object sender, EventArgs e)
         {
             mostrarDatos();
@@ -139,6 +159,33 @@ namespace Supermercado.Forms
             else
             {
                 return;
+            }
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            btnGuardar.Text = "Guardar";
+            txtIdProveedor.Text = string.Empty;
+            txtCodigo.Text = string.Empty;
+            txtNombre.Text = string.Empty;
+            txtMarca.Text = string.Empty;
+            txtTipo.Text = string.Empty;
+            txtGrupo.Text = string.Empty;
+            txtPeso.Text = string.Empty;
+            txtPrecioUnidad.Text = string.Empty;
+            txtStock.Text = string.Empty;
+            id = -1;
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value);
+                CargarDatos(id);
+                tbPaginacion.SelectedTab = tabPage1;
+                btnGuardar.Text = "Actualizar";
+                this.id = id;
             }
         }
     }

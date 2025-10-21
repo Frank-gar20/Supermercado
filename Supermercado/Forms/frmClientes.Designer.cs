@@ -53,6 +53,7 @@
             this.cmsEditarEliminar = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.tbPaginacion.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -72,6 +73,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnLimpiar);
             this.tabPage1.Controls.Add(this.btnGuardar);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.txtNroDoc);
@@ -282,20 +284,32 @@
             this.editarToolStripMenuItem,
             this.eliminarToolStripMenuItem});
             this.cmsEditarEliminar.Name = "cmsEditarEliminar";
-            this.cmsEditarEliminar.Size = new System.Drawing.Size(181, 70);
+            this.cmsEditarEliminar.Size = new System.Drawing.Size(118, 48);
             // 
             // editarToolStripMenuItem
             // 
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
             this.editarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.editarToolStripMenuItem.Text = "Editar";
+            this.editarToolStripMenuItem.Click += new System.EventHandler(this.editarToolStripMenuItem_Click);
             // 
             // eliminarToolStripMenuItem
             // 
             this.eliminarToolStripMenuItem.Name = "eliminarToolStripMenuItem";
-            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.eliminarToolStripMenuItem.Text = "Eliminar";
             this.eliminarToolStripMenuItem.Click += new System.EventHandler(this.eliminarToolStripMenuItem_Click);
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Location = new System.Drawing.Point(541, 117);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(91, 32);
+            this.btnLimpiar.TabIndex = 27;
+            this.btnLimpiar.Text = "Limpiar campos";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // frmClientes
             // 
@@ -343,5 +357,6 @@
         private System.Windows.Forms.ContextMenuStrip cmsEditarEliminar;
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eliminarToolStripMenuItem;
+        private System.Windows.Forms.Button btnLimpiar;
     }
 }
