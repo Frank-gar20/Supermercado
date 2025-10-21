@@ -17,7 +17,7 @@ namespace Supermercado.Forms
         Datos datos = new Datos();
         private void mostrarDatos()
         {
-            DataSet ds = datos.getAlldata("select id_proveedor, codigo, nombre, marca, tipo, grupo," +
+            DataSet ds = datos.getAlldata("select id, id_proveedor, codigo, nombre, marca, tipo, grupo," +
                 "peso, precio_unidad, stock from productos order by id");
             if (ds != null)
             {
@@ -113,6 +113,32 @@ namespace Supermercado.Forms
                     MessageBox.Show("Error al Actualizar el registro", "Sistema",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void eliminarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string id = dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value.ToString();
+            bool resultado;
+            Datos datos = new Datos();
+            if (MessageBox.Show("¿estas seguro de Borrar?", "Sistema", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                string query = "Delete from productos where id = " + id;
+                resultado = datos.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro Eliminado", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                return;
             }
         }
     }

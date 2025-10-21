@@ -109,5 +109,31 @@ namespace Supermercado.Forms
                 }
             }
         }
+
+        private void eliminarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string id = dgvDatos[0, dgvDatos.CurrentCell.RowIndex].Value.ToString();
+            bool resultado;
+            Datos datos = new Datos();
+            if (MessageBox.Show("¿estas seguro de Borrar?", "Sistema", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                string query = "Delete from clientes where id = " + id;
+                resultado = datos.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro Eliminado", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
