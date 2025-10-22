@@ -20,7 +20,7 @@ namespace Supermercado.Forms
             DataSet ds3 = datos.getAlldata("select * from compras_clientes order by id");
             if (ds != null)
             {
-                dgvDatos.DataSource = ds.Tables[0];
+                dgvVentas.DataSource = ds.Tables[0];
                 dgvDetalles.DataSource = ds2.Tables[0];
                 dgvCompras.DataSource = ds3.Tables[0];
             }
@@ -37,6 +37,11 @@ namespace Supermercado.Forms
         private void frmVentas_Activated(object sender, EventArgs e)
         {
             mostrarDatos();
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
