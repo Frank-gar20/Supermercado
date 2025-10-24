@@ -13,7 +13,37 @@ namespace Supermercado.Forms
     public partial class frmFacturas : Form
     {
         int idFacturas = -1;
+        int idDetalles = -1;
         Datos datos = new Datos();
+
+        private void reiniciar()
+        {
+            //FACTURAS
+            txtNumero.Text = string.Empty;
+            txtCodigo.Text = string.Empty;
+            txtImporte.Text = string.Empty;
+
+            dtpFecha.Value = DateTime.Now;
+            mktHora.Clear();
+
+            //DETALLES
+            txtCostoAsoc.Text = string.Empty;
+            txtIva.Text = string.Empty;
+            txtDescPago.Text = string.Empty;
+            txtDescrFactura.Text = string.Empty;
+
+            cbFactura.SelectedIndex = -1;
+            cbTipoFactura.SelectedIndex = -1;
+            cbTipoFactura.Text = string.Empty;
+            cbMedioPago.SelectedIndex = -1;
+            cbMedioPago.Text = string.Empty;
+
+            btnAgregarFacturas.Text = "Agregar";
+            btnAgregarDetalles.Text = "Agregar";
+
+            idFacturas = -1;
+            idDetalles = -1;
+        }
         private void mostrarDatos()
         {
             DataSet ds = datos.getAlldata("select * from facturas order by id");
@@ -49,9 +79,54 @@ namespace Supermercado.Forms
             }
         }
 
+        private void CargarDatosDetalles (int id)
+        {
+            DataSet ds = datos.getAlldata("SELECT * FROM facturas_detalles WHERE id = " + id);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                txtCostoAsoc.Text = ds.Tables[0].Rows[0]["costo_asoc"].ToString();
+                txtIva.Text = ds.Tables[0].Rows[0]["iva"].ToString();
+                txtDescPago.Text = ds.Tables[0].Rows[0]["descr_pago"].ToString();
+                txtDescrFactura.Text = ds.Tables[0].Rows[0]["descr_factura"].ToString();
+                cbFactura.SelectedValue = ds.Tables[0].Rows[0]["id_factura"].ToString();
+                cbTipoFactura.Text = ds.Tables[0].Rows[0]["tipo"].ToString();
+                cbMedioPago.Text = ds.Tables[0].Rows[0]["medio_de_pago"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró la factura", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void frmFacturas_Activated(object sender, EventArgs e)
         {
             mostrarDatos();
+            try
+            {
+                //FACTURA ID
+                DataSet dsFac = datos.getAlldata("SELECT id FROM facturas ORDER BY id");
+                cbFactura.DataSource = dsFac.Tables[0];
+                cbFactura.DisplayMember = "id";
+                cbFactura.ValueMember = "id";
+
+                //TIPO FACTURA
+                cbTipoFactura.Items.Clear();
+                cbTipoFactura.Items.Add("A");
+                cbTipoFactura.Items.Add("B");
+                cbTipoFactura.Items.Add("C");
+                cbTipoFactura.Items.Add("D");
+
+                //MEDIO DE PAGO
+                cbMedioPago.Items.Clear();
+                cbMedioPago.Items.Add("EFECTIVO");
+                cbMedioPago.Items.Add("CHEQUE");
+                cbMedioPago.Items.Add("TARJETA CREDITO");
+                cbMedioPago.Items.Add("TARJETA DEBITO");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar los datos: " + ex.Message, "Sistema");
+            }
         }
 
         private void txtBuscar_TextChanged(object sender, EventArgs e)
@@ -70,11 +145,6 @@ namespace Supermercado.Forms
             {
                 MessageBox.Show("Error al cargar los datos", "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void frmFacturas_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void eliminarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -161,6 +231,7 @@ namespace Supermercado.Forms
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            reiniciar();
         }
 
         private void txtBuscarDetalles_TextChanged(object sender, EventArgs e)
@@ -210,6 +281,71 @@ namespace Supermercado.Forms
             {
                 return;
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //EDITAR DETALLES
+            if (dgvDatosDetalles.CurrentRow != null)
+            {
+                int id = Convert.ToInt32(dgvDatosDetalles[0, dgvDatosDetalles.CurrentCell.RowIndex].Value);
+                CargarDatosDetalles(id);
+                btnAgregarDetalles.Text = "Actualizar";
+                this.idDetalles = id;
+            }
+        }
+
+        private void btnAgregarDetalles_Click(object sender, EventArgs e)
+        {
+            bool resultado;
+            Datos data = new Datos();
+
+            if (idDetalles == -1)
+            {
+                string query = "INSERT INTO facturas_detalles (id_factura, tipo, descr_factura, costo_asoc, iva, medio_de_pago, descr_pago) VALUES (" +
+                Convert.ToInt32(cbFactura.SelectedValue) + ", " +
+                "'" + cbTipoFactura.Text + "', " +
+                "'" + txtDescrFactura.Text + "', " +
+                Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
+                Convert.ToDecimal(txtIva.Text) + ", " +
+                "'" + cbMedioPago.Text + "', " +
+                "'" + txtDescPago.Text + "');";
+
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro agregado", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al agregar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                string query = "UPDATE facturas_detalles SET " +
+                "id_factura = " + Convert.ToInt32(cbFactura.SelectedValue) + ", " +
+                "tipo = '" + cbTipoFactura.Text + "', " +
+                "descr_factura = '" + txtDescrFactura.Text + "', " +
+                "costo_asoc = " + Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
+                "iva = " + Convert.ToDecimal(txtIva.Text) + ", " +
+                "medio_de_pago = '" + cbMedioPago.Text + "', " +
+                "descr_pago = '" + txtDescPago.Text + "' " +
+                "WHERE id = " + idDetalles + ";";
+                resultado = data.ExecuteQuery(query);
+                if (resultado)
+                {
+                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            reiniciar();
         }
     }
 }
