@@ -17,18 +17,28 @@ namespace Supermercado.Clases
             {
                 try
                 {
-                    string Query = "Select id,nombre,apellido from clientes"; //aqui se modifica la query segun lo que
-                                                                              //tengamos en el reporte .rtp
+                    string Query = @"SELECT 
+                            c.nombre AS nombre_cliente,
+                            c.apellido AS apellido_cliente,
+                            p.id AS id_producto,
+                            p.nombre AS nombre_producto,
+                            p.marca AS marca,
+                            vp.cantidad
+                            FROM clientes c
+                            LEFT JOIN compras_clientes cc ON c.id = cc.id_cliente
+                            INNER JOIN ventas v ON cc.id_venta = v.id
+                            INNER JOIN ventas_productos vp ON v.id = vp.id_venta
+                            INNER JOIN productos p ON vp.id_producto = p.id;";
 
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(Query, connection);
 
                     DataSetApp ds = new DataSetApp();
-                    dataAdapter.Fill(ds, "Clientes");
+                    dataAdapter.Fill(ds, "ClientesProducto");
 
                     ReportDocument reporte = new ReportDocument();
 
                     reporte.Load(@"C:\Users\carri\source\repos\Supermercado\Supermercado\Informe.rpt");
-                    reporte.SetDataSource(ds.Tables["Clientes"]);
+                    reporte.SetDataSource(ds.Tables["ClientesProducto"]);
                     return reporte;
                 }
                 catch (Exception ex)
