@@ -396,5 +396,12 @@ namespace Supermercado.Forms
             }
             reiniciar();
         }
+
+        private void btnImprimir_Click(object sender, EventArgs e)
+        {
+            //solo mostramos el frame del reporte
+            frmReporte frmReporte = new frmReporte();
+            frmReporte.ShowDialog();
+        }
     }
 }

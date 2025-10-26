@@ -17,18 +17,19 @@ namespace Supermercado.Clases
             {
                 try
                 {
-                    string Query = @"SELECT 
-                            c.nombre AS nombre_cliente,
-                            c.apellido AS apellido_cliente,
-                            p.id AS id_producto,
-                            p.nombre AS nombre_producto,
-                            p.marca AS marca,
-                            vp.cantidad
-                            FROM clientes c
-                            LEFT JOIN compras_clientes cc ON c.id = cc.id_cliente
-                            INNER JOIN ventas v ON cc.id_venta = v.id
-                            INNER JOIN ventas_productos vp ON v.id = vp.id_venta
-                            INNER JOIN productos p ON vp.id_producto = p.id;";
+                    string Query = @"SELECT
+                        c.id AS id,
+                        c.nombre AS nombre,
+                        c.apellido AS apellido,
+                        p.id AS id_producto,
+                        p.nombre AS nombre_producto,
+                        p.marca,
+                        vp.cantidad
+                        FROM clientes c
+                        INNER JOIN compras_clientes cc ON c.id = cc.id_cliente
+                        INNER JOIN ventas v ON cc.id_venta = v.id
+                        INNER JOIN ventas_productos vp ON v.id = vp.id_venta
+                        INNER JOIN productos p ON vp.id_producto = p.id;";
 
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(Query, connection);
 
