@@ -14,6 +14,7 @@ namespace Supermercado.Forms
     public partial class frmProductos : Form
     {
         int id = -1;
+        string ruta;
         Datos datos = new Datos();
         private void mostrarDatos()
         {
@@ -33,6 +34,25 @@ namespace Supermercado.Forms
             InitializeComponent();
         }
 
+        private void CargarImagen(string query)
+        {
+            try
+            {
+                using (var image = new MagickImage(query))
+                {
+                    using (var ms = new System.IO.MemoryStream(image.ToByteArray(MagickFormat.Bmp)))
+                    {
+                        pbImagen.Image = new Bitmap(ms);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la imagen"+ex.Message,"Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
         private void CargarDatos(int id)
         {
             DataSet ds = datos.getAlldata("SELECT * FROM productos WHERE id = " + id);
@@ -47,6 +67,7 @@ namespace Supermercado.Forms
                 txtPeso.Text = ds.Tables[0].Rows[0]["peso"].ToString();
                 txtPrecioUnidad.Text = ds.Tables[0].Rows[0]["precio_unidad"].ToString();
                 txtStock.Text = ds.Tables[0].Rows[0]["stock"].ToString();
+                CargarImagen(ds.Tables[0].Rows[0]["imagen"].ToString()); //ponemos la imagen
             }
             else
             {
@@ -93,8 +114,8 @@ namespace Supermercado.Forms
 
             if (id == -1)
             {
-                string query = "INSERT INTO productos (id_proveedor, codigo, nombre, marca, tipo, grupo, peso, precio_unidad, stock) " +
-                     "VALUES (" + txtIdProveedor.Text + ", '" + txtCodigo.Text + "', '" + txtNombre.Text + "', '" +
+                string query = "INSERT INTO productos (id_proveedor, codigo, imagen, nombre, marca, tipo, grupo, peso, precio_unidad, stock) " +
+                     "VALUES (" + txtIdProveedor.Text + ", '" + txtCodigo.Text + "', '" + ruta.Replace("'", "''") + "', '" + txtNombre.Text + "', '"+
                      txtMarca.Text + "', '" + txtTipo.Text + "', '" + txtGrupo.Text + "', " + txtPeso.Text + ", " +
                      txtPrecioUnidad.Text + ", " + txtStock.Text + ")";
                 resultado = data.ExecuteQuery(query);
@@ -114,6 +135,7 @@ namespace Supermercado.Forms
                 string query = "UPDATE productos SET " +
                      "id_proveedor = " + txtIdProveedor.Text + ", " +
                      "codigo = '" + txtCodigo.Text + "', " +
+                     "imagen = '" + ruta + "', " +
                      "nombre = '" + txtNombre.Text + "', " +
                      "marca = '" + txtMarca.Text + "', " +
                      "tipo = '" + txtTipo.Text + "', " +
@@ -174,6 +196,8 @@ namespace Supermercado.Forms
             txtPeso.Text = string.Empty;
             txtPrecioUnidad.Text = string.Empty;
             txtStock.Text = string.Empty;
+            pbImagen.Image = null;
+            ruta = String.Empty;
             id = -1;
         }
 
@@ -186,6 +210,60 @@ namespace Supermercado.Forms
                 tbPaginacion.SelectedTab = tabPage1;
                 btnGuardar.Text = "Actualizar";
                 this.id = id;
+            }
+        }
+
+        private void btnAggImagen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+            ofd.Title = "Seleccionar imagen del producto";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                ruta = ofd.FileName;
+
+                try
+                {
+                    // Mostrar la imagen en el PictureBox
+                    using (var image = new MagickImage(ruta))
+                    {
+                        using (var ms = new System.IO.MemoryStream(image.ToByteArray(MagickFormat.Bmp)))
+                        {
+                            pbImagen.Image = new Bitmap(ms);
+                        }
+                    }
+
+                    // Guardar la ruta en la base de datos
+                    if (id != -1) // Si estamos editando un producto existente
+                    {
+                        string query = $"UPDATE productos SET imagen = '{ruta.Replace("'", "''")}' WHERE id = {id}";
+                        Datos data = new Datos();
+                        bool resultado = data.ExecuteQuery(query);
+
+                        if (resultado)
+                        {
+                            MessageBox.Show("Imagen actualizada correctamente", "Sistema",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al actualizar la imagen", "Sistema",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        // Si es un nuevo producto, solo guardamos la ruta para usarla al guardar
+                        MessageBox.Show("Imagen cargada. Se guardará al crear el producto.",
+                            "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar la imagen: " + ex.Message,
+                        "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

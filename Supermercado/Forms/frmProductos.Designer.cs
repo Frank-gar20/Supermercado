@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbPaginacion = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -42,7 +43,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pbImagen = new System.Windows.Forms.PictureBox();
             this.txtStock = new System.Windows.Forms.TextBox();
             this.txtPrecioUnidad = new System.Windows.Forms.TextBox();
             this.txtPeso = new System.Windows.Forms.TextBox();
@@ -59,10 +60,11 @@
             this.cmsEditarEliminar = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.ofdAbrir = new System.Windows.Forms.OpenFileDialog();
+            this.btnAggImagen = new System.Windows.Forms.Button();
             this.tbPaginacion.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbImagen)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.cmsEditarEliminar.SuspendLayout();
@@ -80,6 +82,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnAggImagen);
             this.tabPage1.Controls.Add(this.btnLimpiar);
             this.tabPage1.Controls.Add(this.btnGuardar);
             this.tabPage1.Controls.Add(this.label11);
@@ -92,7 +95,7 @@
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.pictureBox1);
+            this.tabPage1.Controls.Add(this.pbImagen);
             this.tabPage1.Controls.Add(this.txtStock);
             this.tabPage1.Controls.Add(this.txtPrecioUnidad);
             this.tabPage1.Controls.Add(this.txtPeso);
@@ -110,10 +113,21 @@
             this.tabPage1.Text = "Agregar";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Location = new System.Drawing.Point(448, 341);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(91, 32);
+            this.btnLimpiar.TabIndex = 56;
+            this.btnLimpiar.Text = "Limpiar campos";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
             // btnGuardar
             // 
             this.btnGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGuardar.Location = new System.Drawing.Point(539, 309);
+            this.btnGuardar.Location = new System.Drawing.Point(545, 341);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(91, 32);
             this.btnGuardar.TabIndex = 55;
@@ -125,7 +139,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(535, 224);
+            this.label11.Location = new System.Drawing.Point(532, 291);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(63, 20);
             this.label11.TabIndex = 19;
@@ -221,13 +235,13 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "ID Proveedor:";
             // 
-            // pictureBox1
+            // pbImagen
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(448, 43);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(226, 178);
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
+            this.pbImagen.Location = new System.Drawing.Point(448, 27);
+            this.pbImagen.Name = "pbImagen";
+            this.pbImagen.Size = new System.Drawing.Size(226, 261);
+            this.pbImagen.TabIndex = 9;
+            this.pbImagen.TabStop = false;
             // 
             // txtStock
             // 
@@ -349,7 +363,7 @@
             this.editarToolStripMenuItem,
             this.eliminarToolStripMenuItem});
             this.cmsEditarEliminar.Name = "cmsEditarEliminar";
-            this.cmsEditarEliminar.Size = new System.Drawing.Size(181, 70);
+            this.cmsEditarEliminar.Size = new System.Drawing.Size(118, 48);
             // 
             // editarToolStripMenuItem
             // 
@@ -361,20 +375,23 @@
             // eliminarToolStripMenuItem
             // 
             this.eliminarToolStripMenuItem.Name = "eliminarToolStripMenuItem";
-            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.eliminarToolStripMenuItem.Text = "Eliminar";
             this.eliminarToolStripMenuItem.Click += new System.EventHandler(this.eliminarToolStripMenuItem_Click);
             // 
-            // btnLimpiar
+            // ofdAbrir
             // 
-            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.Location = new System.Drawing.Point(442, 309);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(91, 32);
-            this.btnLimpiar.TabIndex = 56;
-            this.btnLimpiar.Text = "Limpiar campos";
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            this.ofdAbrir.FileName = "openFileDialog1";
+            // 
+            // btnAggImagen
+            // 
+            this.btnAggImagen.Location = new System.Drawing.Point(680, 142);
+            this.btnAggImagen.Name = "btnAggImagen";
+            this.btnAggImagen.Size = new System.Drawing.Size(75, 36);
+            this.btnAggImagen.TabIndex = 57;
+            this.btnAggImagen.Text = "cargar imagen";
+            this.btnAggImagen.UseVisualStyleBackColor = true;
+            this.btnAggImagen.Click += new System.EventHandler(this.btnAggImagen_Click);
             // 
             // frmProductos
             // 
@@ -388,7 +405,7 @@
             this.tbPaginacion.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbImagen)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).EndInit();
@@ -405,7 +422,7 @@
         private System.Windows.Forms.DataGridView dgvDatos;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pbImagen;
         private System.Windows.Forms.TextBox txtStock;
         private System.Windows.Forms.TextBox txtPrecioUnidad;
         private System.Windows.Forms.TextBox txtPeso;
@@ -430,5 +447,7 @@
         private System.Windows.Forms.ToolStripMenuItem editarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eliminarToolStripMenuItem;
         private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.OpenFileDialog ofdAbrir;
+        private System.Windows.Forms.Button btnAggImagen;
     }
 }
