@@ -287,47 +287,55 @@ namespace Supermercado.Forms
 
         private void btnAgregarDetalle_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (idDetalle == -1)
+            try
             {
-                string query = "INSERT INTO ventas_productos (id_venta, id_producto, cantidad) VALUES (" +
-                Convert.ToInt32(cbVenta.SelectedValue) + ", " +
-                Convert.ToInt32(cbProducto.SelectedValue) + ", "+
-                Convert.ToInt32(txtCantidad.Text)+ ");";
+                bool resultado;
+                Datos data = new Datos();
 
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                if (idDetalle == -1)
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string query = "INSERT INTO ventas_productos (id_venta, id_producto, cantidad) VALUES (" +
+                    Convert.ToInt32(cbVenta.SelectedValue) + ", " +
+                    Convert.ToInt32(cbProducto.SelectedValue) + ", " +
+                    Convert.ToInt32(txtCantidad.Text) + ");";
+
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro agregado", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al agregar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = "UPDATE ventas_productos SET " +
+                        "id_venta = " + Convert.ToInt32(cbEmpleado.SelectedValue) + ", " +
+                        "id_producto = " + Convert.ToInt32(cbProducto.SelectedValue) + ", " +
+                        "cantidad = " + Convert.ToInt32(txtCantidad.Text) +
+                        " WHERE id = " + idDetalle;
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+                reiniciar();
             }
-            else
+            catch (Exception ex)
             {
-                string query = "UPDATE ventas_productos SET " +
-                    "id_venta = " + Convert.ToInt32(cbEmpleado.SelectedValue) + ", " +
-                    "id_producto = " + Convert.ToInt32(cbProducto.SelectedValue) + ", "+
-                    "cantidad = " + Convert.ToInt32(txtCantidad.Text) +
-                    " WHERE id = " + idDetalle;
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            reiniciar();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
