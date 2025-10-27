@@ -46,10 +46,8 @@ namespace Supermercado.Forms
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar la imagen"+ex.Message,"Sistema",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch (Exception)
+            {                
                 return;
             }
         }
@@ -67,7 +65,7 @@ namespace Supermercado.Forms
                 txtPeso.Text = ds.Tables[0].Rows[0]["peso"].ToString();
                 txtPrecioUnidad.Text = ds.Tables[0].Rows[0]["precio_unidad"].ToString();
                 txtStock.Text = ds.Tables[0].Rows[0]["stock"].ToString();
-                CargarImagen(ds.Tables[0].Rows[0]["imagen"].ToString()); //ponemos la imagen
+                CargarImagen(ds.Tables[0].Rows[0]["imagen"].ToString());
             }
             else
             {
@@ -109,52 +107,61 @@ namespace Supermercado.Forms
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (id == -1)
+            try
             {
-                string query = "INSERT INTO productos (id_proveedor, codigo, imagen, nombre, marca, tipo, grupo, peso, precio_unidad, stock) " +
-                     "VALUES (" + txtIdProveedor.Text + ", '" + txtCodigo.Text + "', '" + ruta.Replace("'", "''") + "', '" + txtNombre.Text + "', '"+
-                     txtMarca.Text + "', '" + txtTipo.Text + "', '" + txtGrupo.Text + "', " + txtPeso.Text + ", " +
-                     txtPrecioUnidad.Text + ", " + txtStock.Text + ")";
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                bool resultado;
+                Datos data = new Datos();
+
+                if (id == -1)
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string query = "INSERT INTO productos (id_proveedor, codigo, imagen, nombre, marca, tipo, grupo, peso, precio_unidad, stock) " +
+                         "VALUES (" + txtIdProveedor.Text + ", '" + txtCodigo.Text + "', '" + ruta.Replace("'", "''") + "', '" + txtNombre.Text + "', '" +
+                         txtMarca.Text + "', '" + txtTipo.Text + "', '" + txtGrupo.Text + "', " + txtPeso.Text + ", " +
+                         txtPrecioUnidad.Text + ", " + txtStock.Text + ")";
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro agregado", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnLimpiar.PerformClick();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al agregar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = "UPDATE productos SET " +
+                         "id_proveedor = " + txtIdProveedor.Text + ", " +
+                         "codigo = '" + txtCodigo.Text + "', " +
+                         "imagen = '" + ruta + "', " +
+                         "nombre = '" + txtNombre.Text + "', " +
+                         "marca = '" + txtMarca.Text + "', " +
+                         "tipo = '" + txtTipo.Text + "', " +
+                         "grupo = '" + txtGrupo.Text + "', " +
+                         "peso = " + txtPeso.Text + ", " +
+                         "precio_unidad = " + txtPrecioUnidad.Text + ", " +
+                         "stock = " + txtStock.Text + " " +
+                         "WHERE id = " + id;
+                    ;
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                string query = "UPDATE productos SET " +
-                     "id_proveedor = " + txtIdProveedor.Text + ", " +
-                     "codigo = '" + txtCodigo.Text + "', " +
-                     "imagen = '" + ruta + "', " +
-                     "nombre = '" + txtNombre.Text + "', " +
-                     "marca = '" + txtMarca.Text + "', " +
-                     "tipo = '" + txtTipo.Text + "', " +
-                     "grupo = '" + txtGrupo.Text + "', " +
-                     "peso = " + txtPeso.Text + ", " +
-                     "precio_unidad = " + txtPrecioUnidad.Text + ", " +
-                     "stock = " + txtStock.Text + " " +
-                     "WHERE id = " + id;
-                ;
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -216,8 +223,6 @@ namespace Supermercado.Forms
         private void btnAggImagen_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
-            ofd.Title = "Seleccionar imagen del producto";
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -225,7 +230,6 @@ namespace Supermercado.Forms
 
                 try
                 {
-                    // Mostrar la imagen en el PictureBox
                     using (var image = new MagickImage(ruta))
                     {
                         using (var ms = new System.IO.MemoryStream(image.ToByteArray(MagickFormat.Bmp)))
@@ -233,14 +237,11 @@ namespace Supermercado.Forms
                             pbImagen.Image = new Bitmap(ms);
                         }
                     }
-
-                    // Guardar la ruta en la base de datos
-                    if (id != -1) // Si estamos editando un producto existente
+                    if (id != -1) // Si estamos editando o agregando
                     {
-                        string query = $"UPDATE productos SET imagen = '{ruta.Replace("'", "''")}' WHERE id = {id}";
+                        string query = $"update productos SET imagen = '{ruta.Replace("'", "''")}' where id = {id}";
                         Datos data = new Datos();
                         bool resultado = data.ExecuteQuery(query);
-
                         if (resultado)
                         {
                             MessageBox.Show("Imagen actualizada correctamente", "Sistema",
@@ -254,9 +255,9 @@ namespace Supermercado.Forms
                     }
                     else
                     {
-                        // Si es un nuevo producto, solo guardamos la ruta para usarla al guardar
                         MessageBox.Show("Imagen cargada. Se guardará al crear el producto.",
                             "Sistema", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //se guardar junto con todos los campos
                     }
                 }
                 catch (Exception ex)

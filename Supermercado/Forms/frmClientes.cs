@@ -32,6 +32,7 @@ namespace Supermercado.Forms
         {
             InitializeComponent();
         }
+
         private void CargarDatos(int id)
         {
             DataSet ds = datos.getAlldata("SELECT * FROM clientes WHERE id = " + id);
@@ -83,48 +84,66 @@ namespace Supermercado.Forms
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (id == -1)
+            try
             {
-                string query = "INSERT INTO clientes (nombre, apellido, tipo_doc, nro_doc, nro_tel_princ, nro_tel_sec, email) " +
-                     "VALUES ('" + txtNombre.Text + "', '" + txtApellido.Text + "', '" + txtTipoDoc.Text + "', '" +
-                     txtNroDoc.Text + "', '" + mtbNroTelPrinc.Text + "', '" + mtbNroTelSec.Text + "', '" + txtEmail.Text + "')";
-
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                if (!(string.IsNullOrEmpty(txtNombre.Text) || string.IsNullOrEmpty(txtApellido.Text) || string.IsNullOrEmpty(txtNroDoc.Text) ||
+                    string.IsNullOrEmpty(txtTipoDoc.Text) || string.IsNullOrEmpty(mtbNroTelPrinc.Text)))
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    bool resultado;
+                    Datos data = new Datos();
+
+                    if (id == -1)
+                    {
+                        string query = "INSERT INTO clientes (nombre, apellido, tipo_doc, nro_doc, nro_tel_princ, nro_tel_sec, email) " +
+                             "VALUES ('" + txtNombre.Text + "', '" + txtApellido.Text + "', '" + txtTipoDoc.Text + "', '" +
+                             txtNroDoc.Text + "', '" + mtbNroTelPrinc.Text + "', '" + mtbNroTelSec.Text + "', '" + txtEmail.Text + "')";
+
+                        resultado = data.ExecuteQuery(query);
+                        if (resultado)
+                        {
+                            MessageBox.Show("Registro agregado", "Sistema",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al agregar el registro", "Sistema",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        string query = "UPDATE clientes SET " +
+                             "nombre = '" + txtNombre.Text + "', " +
+                             "apellido = '" + txtApellido.Text + "', " +
+                             "tipo_doc = '" + txtTipoDoc.Text + "', " +
+                             "nro_doc = '" + txtNroDoc.Text + "', " +
+                             "nro_tel_princ = '" + mtbNroTelPrinc.Text + "', " +
+                             "nro_tel_sec = '" + mtbNroTelSec.Text + "', " +
+                             "email = '" + txtEmail.Text + "' " +
+                             "WHERE id = " + id;
+                        resultado = data.ExecuteQuery(query);
+                        if (resultado)
+                        {
+                            MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Verifica los datos de los campos", "Sistema",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                string query = "UPDATE clientes SET " +
-                     "nombre = '" + txtNombre.Text + "', " +
-                     "apellido = '" + txtApellido.Text + "', " +
-                     "tipo_doc = '" + txtTipoDoc.Text + "', " +
-                     "nro_doc = '" + txtNroDoc.Text + "', " +
-                     "nro_tel_princ = '" + mtbNroTelPrinc.Text + "', " +
-                     "nro_tel_sec = '" + mtbNroTelSec.Text + "', " +
-                     "email = '" + txtEmail.Text + "' " +
-                     "WHERE id = " + id;
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

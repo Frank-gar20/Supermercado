@@ -188,50 +188,58 @@ namespace Supermercado.Forms
 
         private void btnAgregarFacturas_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (idFacturas == -1)
+            try
             {
-                string query = "INSERT INTO facturas (numero, codigo, fecha, hora, importe_total) " +
-                     "VALUES ('" + txtNumero.Text + "', "+
-                     "'"+txtCodigo.Text+"', "+
-                     "'" + dtpFecha.Value.ToString("yyyy-MM-dd")+"', "+
-                     "'" + mktHora.Text + "', "+
-                     Convert.ToDecimal(txtImporte.Text)+ ")";
+                bool resultado;
+                Datos data = new Datos();
 
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                if (idFacturas == -1)
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string query = "INSERT INTO facturas (numero, codigo, fecha, hora, importe_total) " +
+                         "VALUES ('" + txtNumero.Text + "', " +
+                         "'" + txtCodigo.Text + "', " +
+                         "'" + dtpFecha.Value.ToString("yyyy-MM-dd") + "', " +
+                         "'" + mktHora.Text + "', " +
+                         Convert.ToDecimal(txtImporte.Text) + ")";
+
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro agregado", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al agregar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = "UPDATE facturas SET " +
+                         "codigo = '" + txtCodigo.Text + "', " +
+                         "fecha = '" + dtpFecha.Value.ToString("yyyy-MM-dd") + "', " +
+                         "hora = '" + mktHora.Text + "', " +
+                         "importe_total = " + Convert.ToDecimal(txtImporte.Text) + " " +
+                         "WHERE id = " + idFacturas;
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+                reiniciar();
             }
-            else
+            catch(Exception ex)
             {
-                string query = "UPDATE facturas SET " +
-                     "codigo = '" + txtCodigo.Text + "', " +
-                     "fecha = '" + dtpFecha.Value.ToString("yyyy-MM-dd") + "', " +
-                     "hora = '" + mktHora.Text + "', " +
-                     "importe_total = " + Convert.ToDecimal(txtImporte.Text) + " " +
-                     "WHERE id = " + idFacturas;
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            reiniciar();
         }
 
         private void txtBuscarDetalles_TextChanged(object sender, EventArgs e)
@@ -297,55 +305,63 @@ namespace Supermercado.Forms
 
         private void btnAgregarDetalles_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (idDetalles == -1)
+            try
             {
-                string query = "INSERT INTO facturas_detalles (id_factura, tipo, descr_factura, costo_asoc, iva, medio_de_pago, descr_pago) VALUES (" +
-                Convert.ToInt32(cbFactura.SelectedValue) + ", " +
-                "'" + cbTipoFactura.Text + "', " +
-                "'" + txtDescrFactura.Text + "', " +
-                Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
-                Convert.ToDecimal(txtIva.Text) + ", " +
-                "'" + cbMedioPago.Text + "', " +
-                "'" + txtDescPago.Text + "');";
+                bool resultado;
+                Datos data = new Datos();
 
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                if (idDetalles == -1)
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string query = "INSERT INTO facturas_detalles (id_factura, tipo, descr_factura, costo_asoc, iva, medio_de_pago, descr_pago) VALUES (" +
+                    Convert.ToInt32(cbFactura.SelectedValue) + ", " +
+                    "'" + cbTipoFactura.Text + "', " +
+                    "'" + txtDescrFactura.Text + "', " +
+                    Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
+                    Convert.ToDecimal(txtIva.Text) + ", " +
+                    "'" + cbMedioPago.Text + "', " +
+                    "'" + txtDescPago.Text + "');";
+
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro agregado", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al agregar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = "UPDATE facturas_detalles SET " +
+                    "id_factura = " + Convert.ToInt32(cbFactura.SelectedValue) + ", " +
+                    "tipo = '" + cbTipoFactura.Text + "', " +
+                    "descr_factura = '" + txtDescrFactura.Text + "', " +
+                    "costo_asoc = " + Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
+                    "iva = " + Convert.ToDecimal(txtIva.Text) + ", " +
+                    "medio_de_pago = '" + cbMedioPago.Text + "', " +
+                    "descr_pago = '" + txtDescPago.Text + "' " +
+                    "WHERE id = " + idDetalles + ";";
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+                reiniciar();
             }
-            else
+            catch (Exception ex)
             {
-                string query = "UPDATE facturas_detalles SET " +
-                "id_factura = " + Convert.ToInt32(cbFactura.SelectedValue) + ", " +
-                "tipo = '" + cbTipoFactura.Text + "', " +
-                "descr_factura = '" + txtDescrFactura.Text + "', " +
-                "costo_asoc = " + Convert.ToDecimal(txtCostoAsoc.Text) + ", " +
-                "iva = " + Convert.ToDecimal(txtIva.Text) + ", " +
-                "medio_de_pago = '" + cbMedioPago.Text + "', " +
-                "descr_pago = '" + txtDescPago.Text + "' " +
-                "WHERE id = " + idDetalles + ";";
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            reiniciar();
         }
     }
 }

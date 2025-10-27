@@ -92,68 +92,76 @@ namespace Supermercado.Forms
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            bool resultado;
-            Datos data = new Datos();
-
-            if (id == -1)
+            try
             {
-                string query = "INSERT INTO empleados (nombre, apellido, edad, fecha_nac, tipo_doc, nro_doc, cuil, direccion, nro_tel_princ, nro_tel_sec, email, cargo, antiguedad, fecha_ingreso, salario_anual) " +
-                     "VALUES ('" + txtNombre.Text + "', " +
-                     "'" + txtApellido.Text + "', " +
-                    Convert.ToInt32(txtEdad.Text) + ", " +
-                    "'" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', "+
-                    "'" + txtTipoDoc.Text + "', " +
-                    "'" + txtNroDoc.Text + "', " +
-                    "'" + txtCuli.Text + "', " +
-                    "'" + txtDireccion.Text + "', " +
-                    "'" + mtbNroTelPrinc.Text + "', " +
-                    "'" + mtbNroTelSec.Text + "', " +
-                    "'" + txtEmail.Text + "', " +
-                    "'" + txtCargo.Text + "', " +
-                    "'" + txtAntiguedad.Text + "', " +
-                    "'" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
-                    Convert.ToDecimal(txtSalarioAnual.Text) + ")";
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
+                bool resultado;
+                Datos data = new Datos();
+
+                if (id == -1)
                 {
-                    MessageBox.Show("Registro agregado", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string query = "INSERT INTO empleados (nombre, apellido, edad, fecha_nac, tipo_doc, nro_doc, cuil, direccion, nro_tel_princ, nro_tel_sec, email, cargo, antiguedad, fecha_ingreso, salario_anual) " +
+                         "VALUES ('" + txtNombre.Text + "', " +
+                         "'" + txtApellido.Text + "', " +
+                        Convert.ToInt32(txtEdad.Text) + ", " +
+                        "'" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', " +
+                        "'" + txtTipoDoc.Text + "', " +
+                        "'" + txtNroDoc.Text + "', " +
+                        "'" + txtCuli.Text + "', " +
+                        "'" + txtDireccion.Text + "', " +
+                        "'" + mtbNroTelPrinc.Text + "', " +
+                        "'" + mtbNroTelSec.Text + "', " +
+                        "'" + txtEmail.Text + "', " +
+                        "'" + txtCargo.Text + "', " +
+                        "'" + txtAntiguedad.Text + "', " +
+                        "'" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
+                        Convert.ToDecimal(txtSalarioAnual.Text) + ")";
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro agregado", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al agregar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al agregar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string query = "UPDATE empleados SET " +
+                         "nombre = '" + txtNombre.Text + "', " +
+                         "apellido = '" + txtApellido.Text + "', " +
+                         "edad = " + txtEdad.Text + ", " +
+                         "fecha_nac = '" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', " +
+                         "tipo_doc = '" + txtTipoDoc.Text + "', " +
+                         "nro_doc = '" + txtNroDoc.Text + "', " +
+                         "cuil = '" + txtCuli.Text + "', " +
+                         "direccion = '" + txtDireccion.Text + "', " +
+                         "nro_tel_princ = '" + mtbNroTelPrinc.Text + "', " +
+                         "nro_tel_sec = '" + mtbNroTelSec.Text + "', " +
+                         "email = '" + txtEmail.Text + "', " +
+                         "cargo = '" + txtCargo.Text + "', " +
+                         "antiguedad = '" + txtAntiguedad.Text + "', " +
+                         "fecha_ingreso = '" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
+                         "salario_anual = " + txtSalarioAnual.Text + " " +
+                         "WHERE id = " + id;
+                    resultado = data.ExecuteQuery(query);
+                    if (resultado)
+                    {
+                        MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al Actualizar el registro", "Sistema",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                string query = "UPDATE empleados SET " +
-                     "nombre = '" + txtNombre.Text + "', " +
-                     "apellido = '" + txtApellido.Text + "', " +
-                     "edad = " + txtEdad.Text + ", " +
-                     "fecha_nac = '" + dtpFechaNac.Value.ToString("yyyy-MM-dd") + "', " +
-                     "tipo_doc = '" + txtTipoDoc.Text + "', " +
-                     "nro_doc = '" + txtNroDoc.Text + "', " +
-                     "cuil = '" + txtCuli.Text + "', " +
-                     "direccion = '" + txtDireccion.Text + "', " +
-                     "nro_tel_princ = '" + mtbNroTelPrinc.Text + "', " +
-                     "nro_tel_sec = '" + mtbNroTelSec.Text + "', " +
-                     "email = '" + txtEmail.Text + "', " +
-                     "cargo = '" + txtCargo.Text + "', " +
-                     "antiguedad = '" + txtAntiguedad.Text + "', " +
-                     "fecha_ingreso = '" + dtpFechaIngreso.Value.ToString("yyyy-MM-dd") + "', " +
-                     "salario_anual = " + txtSalarioAnual.Text + " " +
-                     "WHERE id = " + id;
-                resultado = data.ExecuteQuery(query);
-                if (resultado)
-                {
-                    MessageBox.Show("Registro Acutalizdo", "Sistemas", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Error al Actualizar el registro", "Sistema",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Verifica los datos de los campos \n Error: " + ex.Message, "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

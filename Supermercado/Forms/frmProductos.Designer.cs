@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbPaginacion = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnAggImagen = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
@@ -61,7 +62,6 @@
             this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ofdAbrir = new System.Windows.Forms.OpenFileDialog();
-            this.btnAggImagen = new System.Windows.Forms.Button();
             this.tbPaginacion.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbImagen)).BeginInit();
@@ -112,6 +112,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Agregar";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnAggImagen
+            // 
+            this.btnAggImagen.Location = new System.Drawing.Point(680, 142);
+            this.btnAggImagen.Name = "btnAggImagen";
+            this.btnAggImagen.Size = new System.Drawing.Size(75, 36);
+            this.btnAggImagen.TabIndex = 57;
+            this.btnAggImagen.Text = "cargar imagen";
+            this.btnAggImagen.UseVisualStyleBackColor = true;
+            this.btnAggImagen.Click += new System.EventHandler(this.btnAggImagen_Click);
             // 
             // btnLimpiar
             // 
@@ -368,30 +378,21 @@
             // editarToolStripMenuItem
             // 
             this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.editarToolStripMenuItem.Text = "Editar";
             this.editarToolStripMenuItem.Click += new System.EventHandler(this.editarToolStripMenuItem_Click);
             // 
             // eliminarToolStripMenuItem
             // 
             this.eliminarToolStripMenuItem.Name = "eliminarToolStripMenuItem";
-            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eliminarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.eliminarToolStripMenuItem.Text = "Eliminar";
             this.eliminarToolStripMenuItem.Click += new System.EventHandler(this.eliminarToolStripMenuItem_Click);
             // 
             // ofdAbrir
             // 
             this.ofdAbrir.FileName = "openFileDialog1";
-            // 
-            // btnAggImagen
-            // 
-            this.btnAggImagen.Location = new System.Drawing.Point(680, 142);
-            this.btnAggImagen.Name = "btnAggImagen";
-            this.btnAggImagen.Size = new System.Drawing.Size(75, 36);
-            this.btnAggImagen.TabIndex = 57;
-            this.btnAggImagen.Text = "cargar imagen";
-            this.btnAggImagen.UseVisualStyleBackColor = true;
-            this.btnAggImagen.Click += new System.EventHandler(this.btnAggImagen_Click);
+            this.ofdAbrir.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             // 
             // frmProductos
             // 
